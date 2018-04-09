@@ -17,20 +17,18 @@ loop do                                             # Server runs forever
 
   header = "HTTP/1.1 200 OK"
   time = Time.now.ctime
-  response = "
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>My first web server</title>
-    </head>
-    <body>
-      <h1>My first web server</h1>
-      <p>Oh hey, this is my first HTML response!</p>
-    </body>
-</html>"
-     # Output the HTTP header with current time to the client
+  filename = "index.html"
+  response = File.read(filename)
+  filename = lines[0].gsub(/GET \//, '').gsub(/\ HTTP.*/, '')
 
-  client.puts(response)
+  if File.exists?(filename)
+    response_body = File.read(filename)
+  else
+    response_body = "File Not Found\n" # need to indicate end of the string with \n
+  end
+       # Output the HTTP header with current time to the client
+
+    client.puts(response)
 
   client.close                                      # Disconnect from the client
 end
